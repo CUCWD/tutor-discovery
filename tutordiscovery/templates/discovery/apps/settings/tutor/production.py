@@ -15,4 +15,6 @@ SOCIAL_AUTH_EDX_OAUTH2_LOGOUT_URL = SOCIAL_AUTH_EDX_OAUTH2_ISSUER + "/logout"
 
 SOCIAL_AUTH_REDIRECT_IS_HTTPS = {% if ENABLE_HTTPS %}True{% else %}False{% endif %}
 
+LOCAL_DISCOVERY_MEDIA_URL = "/media/"
+
 {{ patch("discovery-production-settings") }}
