@@ -20,6 +20,7 @@ config = {
         "HOST": "discovery.{{ LMS_HOST }}",
         "INDEX_OVERRIDES": {},
         "MYSQL_DATABASE": "discovery",
+        "MYSQL_HOSTNETWORK_DEFAULT": "172.16.16.0/255.255.240.0",  # AWS VPC subnet versus all hosts '%' since Docker containers NAT out.
         "MYSQL_USERNAME": "discovery",
         "OAUTH2_KEY": "discovery",
         "OAUTH2_KEY_DEV": "discovery-dev",
@@ -32,7 +33,8 @@ config = {
 hooks = {
     "build-image": {"discovery": "{{ DISCOVERY_DOCKER_IMAGE }}"},
     "remote-image": {"discovery": "{{ DISCOVERY_DOCKER_IMAGE }}"},
-    "init": ["mysql", "lms", "discovery"],
+    "pre-init": ["mysql"],
+    "init": ["lms", "discovery"],
 }
 
 
