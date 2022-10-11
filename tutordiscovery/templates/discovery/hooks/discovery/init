@@ -2,7 +2,6 @@ make migrate
 
 # Development partners
 ./manage.py create_or_update_partner  \
-  --site-id 1 \
   --site-domain {{ DISCOVERY_HOST }}:8381 \
   --code dev --name "Open edX - development" \
   --lms-url="http://lms:8000" \
@@ -12,7 +11,6 @@ make migrate
 
 # Production partner
 ./manage.py create_or_update_partner  \
-  --site-id 2 \
   --site-domain {{ DISCOVERY_HOST }} \
   --code openedx --name "Open edX" \
   --lms-url="http://lms:8000" \
