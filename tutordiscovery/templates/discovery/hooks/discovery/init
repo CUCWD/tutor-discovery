@@ -19,4 +19,4 @@ make migrate
   --organizations-api-url "{% if ENABLE_HTTPS %}https{% else %}http{% endif %}://{{ LMS_HOST }}/api/organizations/v1/"
 
 ./manage.py refresh_course_metadata --partner_code=openedx
-./manage.py update_index --disable-change-limit
+# ./manage.py update_index --disable-change-limit
