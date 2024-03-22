@@ -20,7 +20,8 @@ config = {
         "HOST": "discovery.{{ LMS_HOST }}",
         "INDEX_OVERRIDES": {},
         "MYSQL_DATABASE": "discovery",
-        "MYSQL_HOSTNETWORK_DEFAULT": "172.16.16.0/255.255.240.0",  # AWS VPC subnet versus all hosts '%' since Docker containers NAT out.
+        "MYSQL_HOSTNETWORK_EAST_1A_PUBLIC": "172.16.16.0/255.255.240.0",  # AWS VPC subnet 'edx-prod-us-east-1a-public' versus all hosts '%' since Docker containers NAT out.
+        "MYSQL_HOSTNETWORK_EAST_1B_PUBLIC": "172.16.14.0/255.255.240.0",  # AWS VPC subnet 'edx-prod-us-east-1b-public' versus all hosts '%' since Docker containers NAT out.
         "MYSQL_USERNAME": "discovery",
         "OAUTH2_KEY": "discovery",
         "OAUTH2_KEY_DEV": "discovery-dev",

@@ -14,10 +14,15 @@ do
 done
 echo "MySQL is up and running"
 
-# Disregard setting the local Docker network range since the containers NAT out using the EC2's IP address.
-MYSQL_HOSTNETWORK={{ DISCOVERY_MYSQL_HOSTNETWORK_DEFAULT }}
+echo "Creating user credentials for [{{ DISCOVERY_MYSQL_DATABASE }}] database for subnets [{{ DISCOVERY_MYSQL_HOSTNETWORK_EAST_1A_PUBLIC }}, {{ DISCOVERY_MYSQL_HOSTNETWORK_EAST_1B_PUBLIC }}]."
 
-mysql -u {{ MYSQL_ROOT_USERNAME }} --password="{{ MYSQL_ROOT_PASSWORD }}" --host "{{ MYSQL_HOST }}" --port {{ MYSQL_PORT }} -e 'CREATE DATABASE IF NOT EXISTS {{ DISCOVERY_MYSQL_DATABASE }};'
-mysql -u {{ MYSQL_ROOT_USERNAME }} --password="{{ MYSQL_ROOT_PASSWORD }}" --host "{{ MYSQL_HOST }}" --port {{ MYSQL_PORT }} -e "CREATE USER IF NOT EXISTS '{{ DISCOVERY_MYSQL_USERNAME }}'@'$MYSQL_HOSTNETWORK';"
-mysql -u {{ MYSQL_ROOT_USERNAME }} --password="{{ MYSQL_ROOT_PASSWORD }}" --host "{{ MYSQL_HOST }}" --port {{ MYSQL_PORT }} -e "ALTER USER '{{ DISCOVERY_MYSQL_USERNAME }}'@'$MYSQL_HOSTNETWORK' IDENTIFIED BY '{{ DISCOVERY_MYSQL_PASSWORD }}';"
-mysql -u {{ MYSQL_ROOT_USERNAME }} --password="{{ MYSQL_ROOT_PASSWORD }}" --host "{{ MYSQL_HOST }}" --port {{ MYSQL_PORT }} -e "GRANT ALL ON {{ DISCOVERY_MYSQL_DATABASE }}.* TO '{{ DISCOVERY_MYSQL_USERNAME }}'@'$MYSQL_HOSTNETWORK';"
+for mysql_hostnetwork_default in "{{ DISCOVERY_MYSQL_HOSTNETWORK_EAST_1A_PUBLIC }}" "{{ DISCOVERY_MYSQL_HOSTNETWORK_EAST_1B_PUBLIC }}"
+do
+    # Disregard setting the local Docker network range since the containers NAT out using the EC2's IP address.
+    MYSQL_HOSTNETWORK=$mysql_hostnetwork_default
+
+    mysql -u {{ MYSQL_ROOT_USERNAME }} --password="{{ MYSQL_ROOT_PASSWORD }}" --host "{{ MYSQL_HOST }}" --port {{ MYSQL_PORT }} -e 'CREATE DATABASE IF NOT EXISTS {{ DISCOVERY_MYSQL_DATABASE }};'
+    mysql -u {{ MYSQL_ROOT_USERNAME }} --password="{{ MYSQL_ROOT_PASSWORD }}" --host "{{ MYSQL_HOST }}" --port {{ MYSQL_PORT }} -e "CREATE USER IF NOT EXISTS '{{ DISCOVERY_MYSQL_USERNAME }}'@'$MYSQL_HOSTNETWORK';"
+    mysql -u {{ MYSQL_ROOT_USERNAME }} --password="{{ MYSQL_ROOT_PASSWORD }}" --host "{{ MYSQL_HOST }}" --port {{ MYSQL_PORT }} -e "ALTER USER '{{ DISCOVERY_MYSQL_USERNAME }}'@'$MYSQL_HOSTNETWORK' IDENTIFIED BY '{{ DISCOVERY_MYSQL_PASSWORD }}';"
+    mysql -u {{ MYSQL_ROOT_USERNAME }} --password="{{ MYSQL_ROOT_PASSWORD }}" --host "{{ MYSQL_HOST }}" --port {{ MYSQL_PORT }} -e "GRANT ALL ON {{ DISCOVERY_MYSQL_DATABASE }}.* TO '{{ DISCOVERY_MYSQL_USERNAME }}'@'$MYSQL_HOSTNETWORK';"
+done
