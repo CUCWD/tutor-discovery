@@ -38,6 +38,10 @@ ARG NPM_REGISTRY=https://registry.npmjs.org/
 RUN npm install --verbose --registry=$NPM_REGISTRY --production
 RUN ./node_modules/.bin/bower install --allow-root --production
 
+# A Django Middleware to enable use of CIDR IP ranges in ALLOWED_HOSTS.
+# This is used for AWS Autoscaling Groups with multiple Subnets available.
+RUN pip install -e git+https://github.com/mozmeao/django-allow-cidr.git@0.7.1#egg=django-allow-cidr==0.7.1
+
 # Install django-redis for using redis as a django cache
 RUN pip install django-redis==5.0.0
 
